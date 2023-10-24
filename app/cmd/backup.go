@@ -268,6 +268,11 @@ func createBackup(c *cli.Context) error {
 		return err
 	}
 
+	options, err := butil.GetBackupOptions(dest)
+	if err != nil {
+		return err
+	}
+
 	url := c.GlobalString("url")
 	volumeName := c.GlobalString("volume-name")
 	engineInstanceName := c.GlobalString("engine-instance-name")
@@ -279,7 +284,7 @@ func createBackup(c *cli.Context) error {
 	}
 
 	backup, err := task.CreateBackup(backupName, snapshot, dest, biName, biChecksum,
-		compressionMethod, concurrentLimit, storageClassName, labels, credential)
+		compressionMethod, concurrentLimit, storageClassName, labels, credential, options)
 	if err != nil {
 		return err
 	}
@@ -313,9 +318,15 @@ func restoreBackup(c *cli.Context) error {
 	if err != nil {
 		return err
 	}
+
+	options, err := butil.GetBackupOptions(backup)
+	if err != nil {
+		return err
+	}
+
 	concurrentLimit := c.Int("concurrent-limit")
 
-	if err := task.RestoreBackup(backupURL, credential, concurrentLimit); err != nil {
+	if err := task.RestoreBackup(backupURL, credential, concurrentLimit, options); err != nil {
 		return err
 	}
 

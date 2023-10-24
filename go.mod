@@ -69,3 +69,5 @@ require (
 	k8s.io/mount-utils v0.27.1 // indirect
 	k8s.io/utils v0.0.0-20230406110748-d93618cff8a2 // indirect
 )
+
+replace github.com/longhorn/backupstore v0.0.0-20230917124937-b5235e5ee814 => github.com/ChanYiLin/backupstore v0.0.0-20231024080230-b3e6e609b3ec

@@ -691,6 +691,10 @@ func (s *SyncAgentServer) BackupCreate(ctx context.Context, req *ptypes.BackupCr
 		return nil, err
 	}
 
+	if err := butil.SetupOptions(backupType, req.Options); err != nil {
+		return nil, err
+	}
+
 	// Mounting NFS is part of the backup initialization, and at this stage, the backup status is not
 	// created and is not added to the BackupList.
 	//
@@ -823,6 +827,10 @@ func (s *SyncAgentServer) BackupRestore(ctx context.Context, req *ptypes.BackupR
 
 	if err := butil.SetupCredential(backupType, req.Credential); err != nil {
 		return nil, errors.Wrapf(err, "failed to setup credential for backup %v", req.Backup)
+	}
+
+	if err := butil.SetupOptions(backupType, req.Options); err != nil {
+		return nil, err
 	}
 
 	requestedBackupName, _, _, err := backupstore.DecodeBackupURL(util.UnescapeURL(req.Backup))
